@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -13,11 +14,15 @@ app = FastAPI(
 )
 
 # CORS configuration for React frontend
+# Allow local dev + production Vercel URL
+_frontend_url = os.getenv("FRONTEND_URL", "")
 origins = [
     "http://localhost:5173",
     "http://localhost:5174",
     "http://localhost:3000",
 ]
+if _frontend_url:
+    origins.append(_frontend_url)
 
 app.add_middleware(
     CORSMiddleware,
