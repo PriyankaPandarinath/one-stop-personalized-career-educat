@@ -31,7 +31,8 @@ export async function current_user(token) {
   }
 
   try {
-    const res = await fetch("http://localhost:8000/v1/user/me", {
+    const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+    const res = await fetch(`${BASE_URL}/v1/user/me`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
