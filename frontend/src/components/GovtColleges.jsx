@@ -1,0 +1,462 @@
+import React, { useState } from "react";
+import {
+    Search,
+    MapPin,
+    Star,
+    Trophy,
+    Filter,
+    ChevronDown,
+    ChevronUp,
+    ExternalLink,
+    GraduationCap,
+} from "lucide-react";
+
+const colleges = [
+    {
+        id: 1,
+        name: "IIT Bombay",
+        location: "Mumbai, Maharashtra",
+        state: "Maharashtra",
+        streams: ["Science", "Engineering", "Design"],
+        rating: 4.9,
+        nirfRank: 3,
+        type: "IIT",
+        established: 1958,
+        description:
+            "One of India's premier engineering institutions, known for its world-class research and innovation. IIT Bombay offers undergraduate, postgraduate, and doctoral programs across engineering, science, design, and management.",
+        website: "https://www.iitb.ac.in",
+        highlights: ["NAAC A++", "QS World Ranked", "100+ Research Labs"],
+    },
+    {
+        id: 2,
+        name: "IIT Delhi",
+        location: "New Delhi",
+        state: "Delhi",
+        streams: ["Science", "Engineering", "Management"],
+        rating: 4.9,
+        nirfRank: 2,
+        type: "IIT",
+        established: 1961,
+        description:
+            "A prestigious technological university that has been a leader in innovation and education for over 60 years, producing top industry leaders and researchers worldwide.",
+        website: "https://home.iitd.ac.in",
+        highlights: ["NAAC A++", "Top Placements", "200+ Patents"],
+    },
+    {
+        id: 3,
+        name: "IIT Madras",
+        location: "Chennai, Tamil Nadu",
+        state: "Tamil Nadu",
+        streams: ["Science", "Engineering", "Humanities"],
+        rating: 4.9,
+        nirfRank: 1,
+        type: "IIT",
+        established: 1959,
+        description:
+            "India's top-ranked engineering institution (NIRF #1), consistently recognized for academic excellence, cutting-edge research, and a vibrant campus culture.",
+        website: "https://www.iitm.ac.in",
+        highlights: ["NIRF #1", "Research Park", "Startup Incubator"],
+    },
+    {
+        id: 4,
+        name: "Delhi University",
+        location: "New Delhi",
+        state: "Delhi",
+        streams: ["Arts", "Commerce", "Science"],
+        rating: 4.5,
+        nirfRank: 11,
+        type: "University",
+        established: 1922,
+        description:
+            "One of India's oldest and most prestigious universities, offering diverse programs across arts, commerce, science, law, and management through its affiliated colleges.",
+        website: "https://www.du.ac.in",
+        highlights: ["86 Affiliated Colleges", "NAAC A+", "Heritage Campus"],
+    },
+    {
+        id: 5,
+        name: "NIT Trichy",
+        location: "Tiruchirappalli, Tamil Nadu",
+        state: "Tamil Nadu",
+        streams: ["Engineering", "Architecture", "Management"],
+        rating: 4.6,
+        nirfRank: 9,
+        type: "NIT",
+        established: 1964,
+        description:
+            "A National Institute of Technology known for producing top engineers and industry leaders. Offers world-class infrastructure and research opportunities.",
+        website: "https://www.nitt.edu",
+        highlights: ["NAAC A+", "Top NIT", "Industry Connect"],
+    },
+    {
+        id: 6,
+        name: "AIIMS Delhi",
+        location: "New Delhi",
+        state: "Delhi",
+        streams: ["Medical", "Nursing"],
+        rating: 4.9,
+        nirfRank: 1,
+        type: "Medical",
+        established: 1956,
+        description:
+            "India's premier medical institution, AIIMS Delhi is globally recognized for its medical education, patient care, and groundbreaking research in healthcare.",
+        website: "https://www.aiims.edu",
+        highlights: ["#1 Medical", "Super Specialty", "Research Hub"],
+    },
+    {
+        id: 7,
+        name: "IIT Kharagpur",
+        location: "Kharagpur, West Bengal",
+        state: "West Bengal",
+        streams: ["Science", "Engineering", "Architecture", "Management"],
+        rating: 4.8,
+        nirfRank: 4,
+        type: "IIT",
+        established: 1951,
+        description:
+            "First of the IITs, IIT Kharagpur is the largest IIT campus with the widest range of programs. A pioneer in engineering education in independent India.",
+        website: "https://www.iitkgp.ac.in",
+        highlights: ["Oldest IIT", "2100 Acre Campus", "40+ Departments"],
+    },
+    {
+        id: 8,
+        name: "University of Mumbai",
+        location: "Mumbai, Maharashtra",
+        state: "Maharashtra",
+        streams: ["Arts", "Commerce", "Science", "Engineering"],
+        rating: 4.3,
+        nirfRank: 18,
+        type: "University",
+        established: 1857,
+        description:
+            "One of the oldest universities in India, offering diverse programs through 700+ affiliated colleges. Known for its strong commerce and management programs.",
+        website: "https://mu.ac.in",
+        highlights: ["700+ Colleges", "Historic", "Diverse Programs"],
+    },
+    {
+        id: 9,
+        name: "Jawaharlal Nehru University",
+        location: "New Delhi",
+        state: "Delhi",
+        streams: ["Arts", "Science", "Social Sciences"],
+        rating: 4.6,
+        nirfRank: 6,
+        type: "University",
+        established: 1969,
+        description:
+            "A prestigious central university renowned for its social sciences, international relations, and language programs. Known for academic rigor and vibrant campus life.",
+        website: "https://www.jnu.ac.in",
+        highlights: ["NAAC A++", "Research Focus", "Green Campus"],
+    },
+    {
+        id: 10,
+        name: "NIT Warangal",
+        location: "Warangal, Telangana",
+        state: "Telangana",
+        streams: ["Engineering", "Science", "Management"],
+        rating: 4.5,
+        nirfRank: 13,
+        type: "NIT",
+        established: 1959,
+        description:
+            "One of the oldest NITs in India, consistently ranked among top engineering colleges. Known for strong alumni network and excellent placement record.",
+        website: "https://www.nitw.ac.in",
+        highlights: ["Strong Alumni", "Top Placements", "NAAC A+"],
+    },
+    {
+        id: 11,
+        name: "BHU - Banaras Hindu University",
+        location: "Varanasi, Uttar Pradesh",
+        state: "Uttar Pradesh",
+        streams: ["Arts", "Science", "Commerce", "Engineering", "Medical"],
+        rating: 4.5,
+        nirfRank: 7,
+        type: "University",
+        established: 1916,
+        description:
+            "One of Asia's largest residential universities, BHU offers a vast range of programs and is known for its heritage, academic excellence, and cultural significance.",
+        website: "https://www.bhu.ac.in",
+        highlights: ["Asia's Largest", "Heritage Campus", "Multi-Discipline"],
+    },
+    {
+        id: 12,
+        name: "IISc Bangalore",
+        location: "Bangalore, Karnataka",
+        state: "Karnataka",
+        streams: ["Science", "Engineering"],
+        rating: 4.9,
+        nirfRank: 1,
+        type: "Research Institute",
+        established: 1909,
+        description:
+            "India's premier research institution, IISc is at the forefront of scientific and technological innovation. Known for doctoral programs and cutting-edge research.",
+        website: "https://www.iisc.ac.in",
+        highlights: ["#1 Research", "QS Top 200", "Nobel Laureate Alumni"],
+    },
+    {
+        id: 13,
+        name: "JIPMER Puducherry",
+        location: "Puducherry",
+        state: "Puducherry",
+        streams: ["Medical", "Nursing"],
+        rating: 4.7,
+        nirfRank: 5,
+        type: "Medical",
+        established: 1823,
+        description:
+            "A premier medical institution offering excellent medical education and healthcare services. Known for its MBBS and MD/MS programs with exceptional clinical training.",
+        website: "https://jipmer.edu.in",
+        highlights: ["INI Status", "Oldest Medical", "Free Education"],
+    },
+    {
+        id: 14,
+        name: "SPA New Delhi",
+        location: "New Delhi",
+        state: "Delhi",
+        streams: ["Architecture"],
+        rating: 4.6,
+        nirfRank: 1,
+        type: "Architecture",
+        established: 1941,
+        description:
+            "School of Planning and Architecture is India's top architecture college, offering world-class programs in architecture, planning, and design.",
+        website: "https://spa.ac.in",
+        highlights: ["#1 Architecture", "INI Status", "Urban Planning"],
+    },
+    {
+        id: 15,
+        name: "Anna University",
+        location: "Chennai, Tamil Nadu",
+        state: "Tamil Nadu",
+        streams: ["Engineering", "Science", "Architecture"],
+        rating: 4.4,
+        nirfRank: 15,
+        type: "University",
+        established: 1978,
+        description:
+            "A leading state technical university in Tamil Nadu, with 500+ affiliated engineering colleges. Known for its extensive network and strong industry collaborations.",
+        website: "https://www.annauniv.edu",
+        highlights: ["500+ Colleges", "NAAC A+", "Tech Focus"],
+    },
+];
+
+const states = [
+    "All States",
+    "Delhi",
+    "Maharashtra",
+    "Tamil Nadu",
+    "Karnataka",
+    "West Bengal",
+    "Telangana",
+    "Uttar Pradesh",
+    "Puducherry",
+];
+
+const streamFilters = [
+    "All Streams",
+    "Science",
+    "Engineering",
+    "Medical",
+    "Arts",
+    "Commerce",
+    "Architecture",
+    "Nursing",
+    "Management",
+];
+
+function GovtColleges() {
+    const [search, setSearch] = useState("");
+    const [selectedState, setSelectedState] = useState("All States");
+    const [selectedStream, setSelectedStream] = useState("All Streams");
+    const [expandedId, setExpandedId] = useState(null);
+
+    const filtered = colleges.filter((c) => {
+        const matchName = c.name.toLowerCase().includes(search.toLowerCase());
+        const matchState =
+            selectedState === "All States" || c.state === selectedState;
+        const matchStream =
+            selectedStream === "All Streams" ||
+            c.streams.includes(selectedStream);
+        return matchName && matchState && matchStream;
+    });
+
+    return (
+        <div className="flex flex-col gap-5 pb-8">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl p-6 text-white shadow-lg">
+                <div className="flex items-center gap-3 mb-2">
+                    <GraduationCap size={28} />
+                    <h1 className="text-2xl font-bold">Government Colleges Directory</h1>
+                </div>
+                <p className="text-white/80 text-sm">
+                    Explore top government colleges across India — IITs, NITs, AIIMS &
+                    more
+                </p>
+            </div>
+
+            {/* Search & Filters */}
+            <div className="flex gap-3 items-center">
+                <div className="relative flex-1">
+                    <Search
+                        size={18}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    />
+                    <input
+                        type="text"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="Search colleges by name..."
+                        className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/30 shadow-sm"
+                    />
+                </div>
+
+                <div className="relative">
+                    <Filter
+                        size={14}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    />
+                    <select
+                        value={selectedState}
+                        onChange={(e) => setSelectedState(e.target.value)}
+                        className="appearance-none bg-white border border-gray-200 rounded-xl pl-8 pr-8 py-3 text-sm cursor-pointer focus:outline-none focus:border-emerald-400 shadow-sm"
+                    >
+                        {states.map((s) => (
+                            <option key={s}>{s}</option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="relative">
+                    <GraduationCap
+                        size={14}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    />
+                    <select
+                        value={selectedStream}
+                        onChange={(e) => setSelectedStream(e.target.value)}
+                        className="appearance-none bg-white border border-gray-200 rounded-xl pl-8 pr-8 py-3 text-sm cursor-pointer focus:outline-none focus:border-emerald-400 shadow-sm"
+                    >
+                        {streamFilters.map((s) => (
+                            <option key={s}>{s}</option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+
+            {/* Results Count */}
+            <p className="text-sm text-gray-500">
+                Showing <span className="font-semibold text-gray-700">{filtered.length}</span> college{filtered.length !== 1 ? "s" : ""}
+            </p>
+
+            {/* College Cards */}
+            <div className="flex flex-col gap-4">
+                {filtered.map((college) => {
+                    const isExpanded = expandedId === college.id;
+                    return (
+                        <div
+                            key={college.id}
+                            className={`bg-white border rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden ${isExpanded ? "border-emerald-300" : "border-gray-200"
+                                }`}
+                        >
+                            <div
+                                className="p-5 cursor-pointer"
+                                onClick={() =>
+                                    setExpandedId(isExpanded ? null : college.id)
+                                }
+                            >
+                                <div className="flex items-start justify-between">
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-3 mb-2">
+                                            <h3 className="text-lg font-semibold text-gray-800">
+                                                {college.name}
+                                            </h3>
+                                            <span className="text-xs font-medium bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
+                                                {college.type}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-4 text-sm text-gray-500">
+                                            <span className="flex items-center gap-1">
+                                                <MapPin size={14} />
+                                                {college.location}
+                                            </span>
+                                            <span className="flex items-center gap-1">
+                                                <Star
+                                                    size={14}
+                                                    className="text-yellow-500 fill-yellow-500"
+                                                />
+                                                {college.rating}
+                                            </span>
+                                            <span className="flex items-center gap-1">
+                                                <Trophy size={14} className="text-amber-500" />
+                                                NIRF #{college.nirfRank}
+                                            </span>
+                                        </div>
+                                        <div className="flex gap-2 mt-3 flex-wrap">
+                                            {college.streams.map((s) => (
+                                                <span
+                                                    key={s}
+                                                    className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-md"
+                                                >
+                                                    {s}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <button className="text-gray-400 hover:text-gray-600 transition-colors p-2">
+                                        {isExpanded ? (
+                                            <ChevronUp size={20} />
+                                        ) : (
+                                            <ChevronDown size={20} />
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Expanded Details */}
+                            {isExpanded && (
+                                <div className="border-t border-gray-100 p-5 bg-gray-50/50">
+                                    <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                                        {college.description}
+                                    </p>
+                                    <div className="flex items-center gap-4 mb-4">
+                                        <span className="text-xs text-gray-500">
+                                            Est. {college.established}
+                                        </span>
+                                        <div className="flex gap-2">
+                                            {college.highlights.map((h, i) => (
+                                                <span
+                                                    key={i}
+                                                    className="text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-1 rounded-full"
+                                                >
+                                                    {h}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <a
+                                        href={college.website}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600 hover:text-emerald-700 hover:underline"
+                                    >
+                                        Visit Website
+                                        <ExternalLink size={14} />
+                                    </a>
+                                </div>
+                            )}
+                        </div>
+                    );
+                })}
+
+                {filtered.length === 0 && (
+                    <div className="text-center py-12 text-gray-400">
+                        <GraduationCap size={48} className="mx-auto mb-3 opacity-50" />
+                        <p className="text-lg font-medium">No colleges found</p>
+                        <p className="text-sm">Try adjusting your search or filters</p>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
+export default GovtColleges;
